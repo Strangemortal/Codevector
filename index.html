@@ -1,0 +1,108 @@
+<!--
+  index.html
+  ----------
+  Provides the primary markup structure for the Fast Catalog application.
+  Features:
+  1. Integrates Google Fonts (Inter & Space Grotesk) and Lucide Icons.
+  2. Embeds the sidebar for category lists and live insert forms.
+  3. Establishes the product grid and pagination buttons.
+  4. Imports modular CSS (styles.css) and script files (toasts, categories, products, injector, app).
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeVector Product Directory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="glow-title">Fast Catalog</h1>
+            <p class="subtitle">Keyset Pagination Demo: ~200,000 products sorted newest-first</p>
+        </header>
+
+        <div class="dashboard-grid">
+            <div class="sidebar">
+                <div class="glass-panel">
+                    <h2 class="panel-title"><i data-lucide="filter"></i> Categories</h2>
+                    <div class="category-list" id="categoryList">
+                        <div class="category-pill active" onclick="selectCategory(null)" id="cat-all">
+                            <span>All Categories</span>
+                            <i data-lucide="chevron-right" size="16"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel">
+                    <h2 class="panel-title"><i data-lucide="plus-circle"></i> Live Product Injector</h2>
+                    <div class="simulation-form">
+                        <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                            Injecting a product will insert it with the current timestamp. With Keyset pagination, this insertion will <strong>never</strong> shift current page listings or trigger duplicates.
+                        </p>
+                        <div class="form-group">
+                            <label class="form-label">Product Name</label>
+                            <input type="text" id="simName" class="form-input" placeholder="e.g. Hyper Charger X">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Category</label>
+                            <select id="simCategory" class="form-input">
+                                <option value="Electronics">Electronics</option>
+                                <option value="Clothing">Clothing</option>
+                                <option value="Home & Kitchen">Home & Kitchen</option>
+                                <option value="Books">Books</option>
+                                <option value="Beauty & Health">Beauty & Health</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Price ($)</label>
+                            <input type="number" id="simPrice" class="form-input" value="99.99" step="0.01">
+                        </div>
+                        <button class="btn" onclick="injectProduct()" id="injectBtn">
+                            <i data-lucide="sparkles"></i> Inject Product
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="catalog-section">
+                <div class="catalog-header">
+                    <h2 class="panel-title"><i data-lucide="grid"></i> Product Listings</h2>
+                    <div class="cursor-info-panel" id="cursorInfo">
+                        <i data-lucide="database"></i> Page: First Page (no cursor)
+                    </div>
+                </div>
+
+                <div class="product-grid" id="productGrid">
+                    <div class="product-card skeleton" style="height: 180px;"></div>
+                    <div class="product-card skeleton" style="height: 180px;"></div>
+                    <div class="product-card skeleton" style="height: 180px;"></div>
+                    <div class="product-card skeleton" style="height: 180px;"></div>
+                </div>
+
+                <div class="pagination-container">
+                    <button class="btn btn-secondary" id="prevBtn" onclick="navigate('prev')" disabled>
+                        <i data-lucide="arrow-left"></i> Previous Page
+                    </button>
+                    <button class="btn btn-secondary" id="nextBtn" onclick="navigate('next')" disabled>
+                        Next Page <i data-lucide="arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="/static/js/toasts.js"></script>
+    <script src="/static/js/categories.js"></script>
+    <script src="/static/js/products.js"></script>
+    <script src="/static/js/injector.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

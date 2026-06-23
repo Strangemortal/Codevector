@@ -1,0 +1,36 @@
+# .gitignore
+# ----------
+# Tells Git which files and directories to ignore and exclude from version control.
+# Exclusions include:
+# 1. Local SQLite databases (products.db) to prevent committing mock data.
+# 2. Python compiled bytecode and caches (__pycache__, *.pyc).
+# 3. Virtual environments (.venv, venv).
+# 4. Local environment configuration files (.env).
+# 5. IDE settings (.vscode, .idea).
+
+# Database files
+products.db
+products.db-journal
+
+# Python caches and bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Environments and dependencies
+.env
+.venv
+venv/
+ENV/
+env/
+dist/
+build/
+*.egg-info/
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
