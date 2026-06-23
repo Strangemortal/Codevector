@@ -6,15 +6,14 @@ Key Responsibilities:
 1. Formulates 200,000 distinct mock products with randomized names, categories, and prices.
 2. Spacers creation dates chronologically so they represent a continuous historical feed.
 3. Wipes out any existing catalog items to allow fresh, clean runs.
-4. Performs batch inserts in chunks of 10,000 using SQLAlchemy Core, seeding all 200k items in under 3 seconds.
+4. Performs batch inserts in chunks of 2,000 using the Supabase client SDK over HTTP REST APIs.
 """
 
 import os
 import random
 import time
 from datetime import datetime, timedelta
-from sqlalchemy import insert
-from database import engine, Product, init_db
+from database import supabase
 
 CATEGORIES = [
     "Electronics", "Clothing", "Home & Kitchen", "Books", 
@@ -48,29 +47,32 @@ def generate_products(count=200000):
             "name": name,
             "category": cat,
             "price": price,
-            "created_at": created_at,
-            "updated_at": created_at
+            "created_at": created_at.isoformat(),
+            "updated_at": created_at.isoformat()
         })
     return products
 
 def seed_db(count=200000):
-    print("Initializing database tables and indexes...")
-    init_db()
-    
     products = generate_products(count)
     
-    print(f"Inserting {count} products into the database...")
+    print(f"Inserting {count} products into the Supabase database...")
     start_time = time.time()
     
-    batch_size = 10000
-    with engine.begin() as conn:
-        print("Clearing existing products...")
-        conn.execute(Product.__table__.delete())
-        
-        for i in range(0, count, batch_size):
-            batch = products[i:i+batch_size]
-            conn.execute(insert(Product), batch)
-            print(f"Inserted batch {i // batch_size + 1}/{count // batch_size}...")
+    # Clear existing products
+    print("Clearing existing products from Supabase...")
+    try:
+        supabase.table("products").delete().gt("id", 0).execute()
+    except Exception as e:
+        print(f"Warning during delete: {e}. Attempting to proceed...")
+    
+    batch_size = 2000
+    total_batches = count // batch_size
+    
+    for i in range(0, count, batch_size):
+        batch = products[i:i+batch_size]
+        supabase.table("products").insert(batch).execute()
+        if (i // batch_size + 1) % 5 == 0 or i // batch_size + 1 == total_batches:
+            print(f"Inserted batch {i // batch_size + 1}/{total_batches}...")
             
     end_time = time.time()
     print(f"Successfully seeded {count} products in {end_time - start_time:.2f} seconds!")

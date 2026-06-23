@@ -13,8 +13,7 @@ import os
 import random
 import time
 from datetime import datetime, timedelta
-from sqlalchemy import insert
-from database import engine, Product
+from database import supabase
 
 CATEGORIES = [
     "Electronics", "Clothing", "Home & Kitchen", "Books", 
@@ -48,8 +47,8 @@ def generate_new_products(count=50):
             "name": name,
             "category": cat,
             "price": price,
-            "created_at": created_at,
-            "updated_at": created_at
+            "created_at": created_at.isoformat(),
+            "updated_at": created_at.isoformat()
         })
     return products
 
@@ -59,8 +58,7 @@ def append_db(count=50):
     print(f"Appending {count} products to the database...")
     start_time = time.time()
     
-    with engine.begin() as conn:
-        conn.execute(insert(Product), products)
+    supabase.table("products").insert(products).execute()
             
     end_time = time.time()
     print(f"Successfully appended {count} products in {end_time - start_time:.4f} seconds!")
