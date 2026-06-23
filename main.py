@@ -16,7 +16,7 @@ import base64
 from datetime import datetime
 from typing import List, Optional
 from fastapi import FastAPI, Depends, Query, HTTPException
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from database import supabase
@@ -126,6 +126,10 @@ def create_product(
     if not response.data:
         raise HTTPException(status_code=500, detail="Failed to insert product")
     return response.data[0]
+
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon():
+    return Response(status_code=204)
 
 @app.get("/", response_class=HTMLResponse)
 def get_index():
