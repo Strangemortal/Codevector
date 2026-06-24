@@ -29,10 +29,6 @@ CREATE INDEX ix_products_category_created_id ON products (category, created_at D
 
 ### 2. Configure Environment Variables
 Create a `.env` file in the project root:
-```ini
-SUPABASE_URL=https://utwqcplaeiczwaaoipwz.supabase.co
-SUPABASE_KEY=sb_publishable_Apg8Vk8f0Y9zZwX80dhCFA_tM4B8XtY
-```
 
 ### 3. Install Dependencies
 ```bash
